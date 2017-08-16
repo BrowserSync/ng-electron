@@ -17,21 +17,26 @@ import {BsProxy, Mapping} from "./interfaces";
             </div>
             <div class="field">
                 <p><strong>Proxies</strong> <button type="button" (click)="addProxy()">Add</button></p>
-                <div class="field-item" formArrayName="proxies" *ngFor="let proxy of proxies.controls; let i=index">
-                    <div class="mapping" [formGroupName]="i">
-                        <input formControlName="target" id="{{'proxy' + i}}">
-                        <button type="button" (click)="deleteProxy(proxy, i)">Delete</button>
+                <div [sortablejs]="proxies" [sortablejsOptions]="draggerOptions">
+                    <div class="field-item" formArrayName="proxies" *ngFor="let proxy of proxies.controls; let i=index">
+                        <div class="mapping" [formGroupName]="i">
+                            <input formControlName="target" id="{{'proxy' + i}}">
+                            <button type="button" (click)="deleteProxy(proxy, i)">Delete</button>
+                            <button type="button" class="drag-move">move</button>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="field">
                 <p><strong>Mappings</strong> <button type="button" (click)="addMapping()">Add</button></p>
-                <div class="field-item" formArrayName="mappings" *ngFor="let mapping of mappings.controls; let i=index">
-                    <div class="mapping" [formGroupName]="i">
-                        <input formControlName="dir" id="{{'dir' + i}}">
-                        <input formControlName="route" id="{{'route' + i}}">
-                        <button type="button" (click)="deleteMapping(mapping, i)">Delete</button>
-                        <button type="button" (click)="prefillMapping(mapping)">Prefill mapping</button>
+                <div [sortablejs]="mappings" [sortablejsOptions]="draggerOptions">
+                    <div class="field-item" formArrayName="mappings" *ngFor="let mapping of mappings.controls; let i=index">
+                        <div class="mapping" [formGroupName]="i">
+                            <input formControlName="dir" id="{{'dir' + i}}">
+                            <input formControlName="route" id="{{'route' + i}}">
+                            <button type="button" (click)="deleteMapping(mapping, i)">Delete</button>
+                            <button type="button" class="drag-move">move</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -41,10 +46,9 @@ import {BsProxy, Mapping} from "./interfaces";
 })
 export class OptionsFormComponent implements OnInit {
     optionsForm: FormGroup;
+    draggerOptions = {handle: '.drag-move'};
 
-    constructor(private fb: FormBuilder) {
-
-    }
+    constructor(private fb: FormBuilder) {}
 
     get mappings(): FormArray {
         return <FormArray>this.optionsForm.get('mappings');
@@ -76,7 +80,8 @@ export class OptionsFormComponent implements OnInit {
         const proxy: BsProxy = {
             target: '',
             id,
-            sortOrder
+            sortOrder,
+            active: true
         }
         return this.fb.group(proxy);
     }
@@ -91,7 +96,8 @@ export class OptionsFormComponent implements OnInit {
             dir: '',
             route: '',
             id,
-            sortOrder
+            sortOrder,
+            active: true
         }
         return this.fb.group(mapping);
     }
@@ -110,6 +116,7 @@ export class OptionsFormComponent implements OnInit {
 
         this.optionsForm.valueChanges
             .pluck('proxies')
+            .distinctUntilChanged((a: FormArray, b: FormArray) => a.length === b.length)
             .subscribe((x: any[]) => {
                 console.table(x);
                 // console.log('Mapping length:', x.length);

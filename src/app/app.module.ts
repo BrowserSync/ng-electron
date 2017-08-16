@@ -6,6 +6,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import { OptionsFormComponent } from './options-form/options-form.component';
 import { StoreModule } from '@ngrx/store';
 import { globalReducer } from '../reducers/global';
+import {  SortablejsModule } from 'angular-sortablejs';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { globalReducer } from '../reducers/global';
   imports: [
     BrowserModule,
     ReactiveFormsModule,
+    SortablejsModule,
     StoreModule.forRoot({ global: globalReducer })
   ],
   providers: [],
