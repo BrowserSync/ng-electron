@@ -10,7 +10,6 @@ export interface AppState {
 @Component({
   selector: 'app-root',
   template: `
-    <header>Running? {{(global|async)?.active}}</header>
     <app-options-form></app-options-form>
     <button type="button" (click)="click()">Click</button>
   `,

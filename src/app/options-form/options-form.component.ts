@@ -1,6 +1,8 @@
 import 'rxjs/Rx';
 import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormControl, FormBuilder, Validators, FormArray} from '@angular/forms';
+import * as uuid from 'uuid/v4';
+import {BsProxy, Mapping} from "./interfaces";
 
 @Component({
     selector: 'app-options-form',
@@ -14,12 +16,22 @@ import {FormGroup, FormControl, FormBuilder, Validators, FormArray} from '@angul
                 />
             </div>
             <div class="field">
+                <p><strong>Proxies</strong> <button type="button" (click)="addProxy()">Add</button></p>
+                <div class="field-item" formArrayName="proxies" *ngFor="let proxy of proxies.controls; let i=index">
+                    <div class="mapping" [formGroupName]="i">
+                        <input formControlName="target" id="{{'proxy' + i}}">
+                        <button type="button" (click)="deleteProxy(proxy, i)">Delete</button>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
                 <p><strong>Mappings</strong> <button type="button" (click)="addMapping()">Add</button></p>
-                
                 <div class="field-item" formArrayName="mappings" *ngFor="let mapping of mappings.controls; let i=index">
                     <div class="mapping" [formGroupName]="i">
                         <input formControlName="dir" id="{{'dir' + i}}">
                         <input formControlName="route" id="{{'route' + i}}">
+                        <button type="button" (click)="deleteMapping(mapping, i)">Delete</button>
+                        <button type="button" (click)="prefillMapping(mapping)">Prefill mapping</button>
                     </div>
                 </div>
             </div>
@@ -38,15 +50,50 @@ export class OptionsFormComponent implements OnInit {
         return <FormArray>this.optionsForm.get('mappings');
     }
 
-    addMapping() {
-        this.mappings.push(this.createMapping())
+    get proxies(): FormArray {
+        return <FormArray>this.optionsForm.get('proxies');
     }
 
-    createMapping(): FormGroup {
-        return this.fb.group({
+    addMapping() {
+        const id = uuid();
+        this.mappings.push(this.createMapping(id, this.mappings.controls.length))
+    }
+
+    addProxy() {
+        const id = uuid();
+        this.proxies.push(this.createProxy(id, this.mappings.controls.length))
+    }
+
+    deleteMapping(incoming: FormGroup, i) {
+        this.mappings.removeAt(i);
+    }
+
+    deleteProxy(incoming: FormGroup, i) {
+        this.proxies.removeAt(i);
+    }
+
+    createProxy(id, sortOrder): FormGroup {
+        const proxy: BsProxy = {
+            target: '',
+            id,
+            sortOrder
+        }
+        return this.fb.group(proxy);
+    }
+
+    prefillMapping(incoming: FormGroup, i = 0) {
+        // incoming.patchValue({dir: 'shane'});
+        // console.log(this.mappings.controls.reverse());
+    }
+
+    createMapping(id: string, sortOrder: number): FormGroup {
+        const mapping: Mapping = {
             dir: '',
             route: '',
-        });
+            id,
+            sortOrder
+        }
+        return this.fb.group(mapping);
     }
 
     ngOnInit() {
@@ -58,11 +105,14 @@ export class OptionsFormComponent implements OnInit {
                 Validators.pattern('\\d+')
             ]],
             mappings: this.fb.array([]),
+            proxies: this.fb.array([]),
         });
 
         this.optionsForm.valueChanges
-            .subscribe(x => {
-                console.log(x);
+            .pluck('proxies')
+            .subscribe((x: any[]) => {
+                console.table(x);
+                // console.log('Mapping length:', x.length);
             })
     }
 }
