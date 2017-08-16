@@ -14,8 +14,8 @@ import { globalReducer } from '../reducers/global';
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     StoreModule.forRoot({ global: globalReducer })
-    // ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
