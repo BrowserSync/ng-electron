@@ -11,13 +11,12 @@ export interface AppState {
   selector: 'app-root',
   template: `
     <app-options-form></app-options-form>
-    <button type="button" (click)="click()">Click</button>
   `,
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  global: Observable<GlobalState>
-  active: Observable<boolean>
+  global: Observable<GlobalState>;
+  active: Observable<boolean>;
   constructor(private store: Store<AppState>) {
       this.global = store.select('global');
   }

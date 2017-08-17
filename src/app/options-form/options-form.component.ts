@@ -2,7 +2,9 @@ import 'rxjs/Rx';
 import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormControl, FormBuilder, Validators, FormArray} from '@angular/forms';
 import * as uuid from 'uuid/v4';
-import {BsProxy, Mapping} from "./interfaces";
+import {Store} from "@ngrx/store";
+import {AppState} from "../app.component";
+import {OptionsActions, OptionsState, optionAction} from "./reducer";
 
 @Component({
     selector: 'app-options-form',
@@ -48,7 +50,7 @@ export class OptionsFormComponent implements OnInit {
     optionsForm: FormGroup;
     draggerOptions = {handle: '.drag-move'};
 
-    constructor(private fb: FormBuilder) {}
+    constructor(private fb: FormBuilder, public store: Store<AppState>) {}
 
     get mappings(): FormArray {
         return <FormArray>this.optionsForm.get('mappings');
@@ -77,8 +79,17 @@ export class OptionsFormComponent implements OnInit {
     }
 
     createProxy(id, sortOrder): FormGroup {
-        const proxy: BsProxy = {
-            target: '',
+        const proxy: BsProxyCreate = {
+            target: ['', [Validators.required, (item) => {
+                try {
+                    const url = new URL(item.value);
+                } catch (e) {
+                    return {
+                        invalidFormat: true
+                    }
+                }
+                return null;
+            }]],
             id,
             sortOrder,
             active: true
@@ -92,13 +103,13 @@ export class OptionsFormComponent implements OnInit {
     }
 
     createMapping(id: string, sortOrder: number): FormGroup {
-        const mapping: Mapping = {
-            dir: '',
-            route: '',
+        const mapping: MappingCreate = {
+            dir: ['', Validators.required],
+            route: ['', Validators.required],
             id,
             sortOrder,
             active: true
-        }
+        };
         return this.fb.group(mapping);
     }
 
@@ -114,12 +125,58 @@ export class OptionsFormComponent implements OnInit {
             proxies: this.fb.array([]),
         });
 
-        this.optionsForm.valueChanges
-            .pluck('proxies')
-            .distinctUntilChanged((a: FormArray, b: FormArray) => a.length === b.length)
-            .subscribe((x: any[]) => {
-                console.table(x);
-                // console.log('Mapping length:', x.length);
-            })
+        const form = this.optionsForm;
+
+        // partition returns 2 observables, one contains elements that pass the test
+        // the other contains elements that fail
+        const [valid, invalid] = form.statusChanges.partition(x => x === 'VALID');
+
+        // Now we can listen to the 'valid' stream and when it emits events,
+        // we grab the latest values from the 'valueChanges' stream
+        // This means we can have logic that only fires when valid
+        // + we get access to the values that caused it to be valid
+        valid
+            .withLatestFrom(form.valueChanges)
+            .subscribe(([_, values]) => {
+                const options: OptionsState = values;
+                this.store.dispatch(optionAction(OptionsActions.UPDATE, options))
+            });
+
+        // The 'invalid' stream could be used to disable buttons etc
+        invalid
+            .subscribe(invalid =>
+                console.log('INVALID!', invalid)
+            );
     }
+}
+
+export interface MappingValues {
+    dir: string
+    route: string
+    id: string
+    sortOrder: number
+    active: boolean
+}
+
+export interface MappingCreate {
+    dir: any[]
+    route: any[]
+    id: string
+    sortOrder: number
+    active: boolean
+}
+
+
+export interface BsProxyValues {
+    target: string
+    id: string
+    sortOrder: number
+    active: boolean
+}
+
+export interface BsProxyCreate {
+    target: any[]
+    id: string
+    sortOrder: number
+    active: boolean
 }

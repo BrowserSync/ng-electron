@@ -7,6 +7,8 @@ import { OptionsFormComponent } from './options-form/options-form.component';
 import { StoreModule } from '@ngrx/store';
 import { globalReducer } from '../reducers/global';
 import {  SortablejsModule } from 'angular-sortablejs';
+import {optionsReducer} from "./options-form/reducer";
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,13 @@ import {  SortablejsModule } from 'angular-sortablejs';
     BrowserModule,
     ReactiveFormsModule,
     SortablejsModule,
-    StoreModule.forRoot({ global: globalReducer })
+    StoreModule.forRoot({
+        global: globalReducer,
+        options: optionsReducer
+    }),
+    StoreDevtoolsModule.instrument({
+        maxAge: 25 //  Retains last 25 states
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

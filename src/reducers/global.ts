@@ -7,10 +7,6 @@ export enum GlobalActions {
     RESET = 'RESET',
 }
 
-export const INCREMENT = 'INCREMENT';
-export const DECREMENT = 'DECREMENT';
-export const RESET = 'RESET';
-
 export interface GlobalState {
     active: boolean;
 }
