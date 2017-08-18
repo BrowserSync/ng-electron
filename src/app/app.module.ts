@@ -9,11 +9,13 @@ import { globalReducer } from '../reducers/global';
 import {  SortablejsModule } from 'angular-sortablejs';
 import {optionsReducer} from "./options-form/reducer";
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { IconComponent } from './icon/icon.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     OptionsFormComponent,
+    IconComponent,
   ],
   imports: [
     BrowserModule,

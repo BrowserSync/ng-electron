@@ -11,6 +11,7 @@ import {OptionsActions, OptionsState, optionAction} from "./reducer";
     template: `
         <form [formGroup]="optionsForm" novalidate>
             <div class="field">
+                <p class="field-title">Port</p>
                 <input
                     formControlName="port"
                     type="text"
@@ -18,7 +19,10 @@ import {OptionsActions, OptionsState, optionAction} from "./reducer";
                 />
             </div>
             <div class="field">
-                <p><strong>Proxies</strong> <button type="button" (click)="addProxy()">Add</button></p>
+                <p class="field-title">
+                    Proxies
+                    <app-icon name="add_circle" (onClick)="addProxy()"></app-icon>
+                </p>
                 <div [sortablejs]="proxies" [sortablejsOptions]="draggerOptions">
                     <div class="field-item" formArrayName="proxies" *ngFor="let proxy of proxies.controls; let i=index">
                         <div class="mapping" [formGroupName]="i">
@@ -30,11 +34,16 @@ import {OptionsActions, OptionsState, optionAction} from "./reducer";
                 </div>
             </div>
             <div class="field">
-                <p><strong>Mappings</strong> <button type="button" (click)="addMapping()">Add</button></p>
+                <p class="field-title">Mappings
+                    <app-icon name="add_circle" (onClick)="addMapping()"></app-icon>
+                </p>
                 <div [sortablejs]="mappings" [sortablejsOptions]="draggerOptions">
-                    <div class="field-item" formArrayName="mappings" *ngFor="let mapping of mappings.controls; let i=index">
+                    <div class="field-item" formArrayName="mappings"
+                         *ngFor="let mapping of mappings.controls; let i=index">
                         <div class="mapping" [formGroupName]="i">
+                            <label attr.for="{{'dir' + i}}">Dir</label>
                             <input formControlName="dir" id="{{'dir' + i}}">
+                            <label attr.for="{{'route' + i}}">Route</label>
                             <input formControlName="route" id="{{'route' + i}}">
                             <button type="button" (click)="deleteMapping(mapping, i)">Delete</button>
                             <button type="button" class="drag-move">move</button>
@@ -66,6 +75,7 @@ export class OptionsFormComponent implements OnInit {
     }
 
     addProxy() {
+        console.log('add proxy');
         const id = uuid();
         this.proxies.push(this.createProxy(id, this.mappings.controls.length))
     }

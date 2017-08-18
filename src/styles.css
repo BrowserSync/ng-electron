@@ -1,1 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    padding: 0;
+    margin: 0;
+    --accent: #ff5f05;
+    --accent-hover: #dd5c05;
+    --base-font-size: 18px;
+    --base-spacing: 20px;
+    --double-spacing: 40px;
+    --width: 500px;
+    font-size: var(--base-font-size);
+    padding-top: var(--double-spacing);
+}
+
+p {
+    margin-top: 0;
+}
+
+@import "assets/fonts/material-icons.css";
