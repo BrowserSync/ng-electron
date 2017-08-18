@@ -13,7 +13,6 @@ export interface AppState {
   selector: 'app-root',
   template: `
     <app-options-form></app-options-form>
-    <pre><code>{{options|async|json}}</code></pre>  
   `,
   styleUrls: ['./app.component.css']
 })

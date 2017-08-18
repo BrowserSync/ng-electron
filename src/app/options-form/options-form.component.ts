@@ -5,91 +5,18 @@ import * as uuid from 'uuid/v4';
 import {Store} from "@ngrx/store";
 import {AppState} from "../app.component";
 import {OptionsActions, OptionsState, optionAction} from "./reducer";
+import {Observable} from "rxjs/Observable";
 
 @Component({
     selector: 'app-options-form',
-    template: `
-        <form [formGroup]="optionsForm" novalidate>
-            <div class="field">
-                <p class="field-title">Port</p>
-                <input
-                    formControlName="port"
-                    type="text"
-                    placeholder="eg: 3200"
-                    class="field-text-input"
-                />
-            </div>
-            <div class="field">
-                <p class="field-title">
-                    Proxies
-                    <app-icon name="add_circle" (onClick)="addProxy()"></app-icon>
-                </p>
-                <div [sortablejs]="proxies" [sortablejsOptions]="draggerOptions">
-                    <div class="field-item" formArrayName="proxies" *ngFor="let proxy of proxies.controls; let i=index">
-                        <div class="field-item__bar" [formGroupName]="i">
-                            <div class="field-item__inputs">
-                                <input formControlName="target" 
-                                        id="{{'proxy' + i}}" 
-                                        placeholder="eg: http://example.com"
-                                        class="field-text-input field-text-input--grow" />
-                            </div>
-                            <div class="field-item__controls">
-                                <app-icon name="delete_forever" (onClick)="deleteProxy(proxy, i)"></app-icon>
-                                <app-icon name="pause" (onClick)="pauseProxy(proxy, i)" *ngIf="proxy.get('active').value"></app-icon>
-                                <app-icon name="play_circle_filled" (onClick)="pauseProxy(proxy, i)" *ngIf="!proxy.get('active').value"></app-icon>
-                                <app-icon name="swap_vert" class="drag-move"></app-icon>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="field">
-                <p class="field-title">Mappings
-                    <app-icon name="add_circle" (onClick)="addMapping()"></app-icon>
-                </p>
-                <div [sortablejs]="mappings" [sortablejsOptions]="draggerOptions">
-                    <div class="field-item" formArrayName="mappings" *ngFor="let mapping of mappings.controls; let i=index">
-                        <div class="field-item__bar" [formGroupName]="i">
-                            <div class="field-item__inputs">
-                                <label attr.for="{{'dir' + i}}" class="micro-label">Dir</label>
-                                <div class="field-item__inline">
-                                    <button type="button" class="field-item__inline-button">
-                                        <i class="material-icons">create_new_folder</i>
-                                    </button>
-                                    <input formControlName="dir" 
-                                            id="{{'dir' + i}}" 
-                                            placeholder="eg: /Users/shakyshane/sites/wp/wp-content"
-                                            class="field-text-input field-text-input--grow">
-                                </div>
-                                <label attr.for="{{'route' + i}}" class="micro-label">Route</label>
-                                <div class="field-item__inline">
-                                    <span class="field-item__inline-button cursor-default">
-                                        <i class="material-icons">language</i>
-                                    </span>
-                                    <input formControlName="route" 
-                                        id="{{'route' + i}}"
-                                        placeholder="eg: /wp-content"
-                                        class="field-text-input field-text-input--grow" />
-                                </div>
-                            </div>
-                            <div class="field-item__controls">
-                                <app-icon name="delete_forever" (onClick)="deleteMapping(mapping, i)"></app-icon>
-                                <app-icon name="pause" (onClick)="pauseMapping(mapping, i)" *ngIf="mapping.get('active').value"></app-icon>
-                                <app-icon name="play_circle_filled" (onClick)="pauseMapping(mapping, i)" *ngIf="!mapping.get('active').value"></app-icon>
-                                <app-icon name="swap_vert" class="drag-move"></app-icon>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    `,
+    templateUrl: './options-form.component.html',
     styleUrls: ['./options-form.component.css']
 })
 export class OptionsFormComponent implements OnInit {
     optionsForm: FormGroup;
     draggerOptions = {handle: '.drag-move'};
     isValid = false;
+    valid$: Observable<boolean>
 
     constructor(private fb: FormBuilder, public store: Store<AppState>) {}
 
@@ -183,6 +110,10 @@ export class OptionsFormComponent implements OnInit {
         // partition returns 2 observables, one contains elements that pass the test
         // the other contains elements that fail
         const [valid, invalid] = form.statusChanges.partition(x => x === 'VALID');
+
+        this.valid$ = form.statusChanges
+            .map(x => x === 'VALID')
+            .startWith(true);
 
         // Now we can listen to the 'valid' stream and when it emits events,
         // we grab the latest values from the 'valueChanges' stream
