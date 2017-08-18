@@ -8,14 +8,78 @@
     --title-size: 1.2rem;
     font-size: var(--title-size);
     font-weight: bold;
+    margin-bottom: var(--half-spacing);
+}
+
+.field-item {
+}
+
+.field-item__bar {
+    display: flex;
+    width: 100%;
+    /*border: 1px solid red;*/
+}
+
+.field-item__bar {
+    /*border-bottom: */
+}
+
+.field-item__inputs {
+    flex-grow: 1;
+}
+
+.field-item__inline {
+    display: flex;
+    align-items: center;
+}
+
+.field-item__inline-button {
+    background: none;
+    border: 0;
+    /*height: 24px;*/
+    /*width: 24px;*/
+    padding: 0;
+    cursor: pointer;
+    color: var(--accent);
+    margin-right:10px;
+    outline: 0;
+}
+
+
+.cursor-default {
+    cursor: default;
+}
+
+.field-item__controls {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
 }
 
 .field-title .material-icons {
-    color: var(--accent)
+    color: pink
 }
 
-.icon-button {
-    background: none;
+.field-title .icon-button {
+    /*background: none;*/
+    /*border: 0;*/
+    /*cursor: pointer;*/
+}
+
+.field-text-input {
+    height: var(--double-spacing);
+    line-height: var(--double-spacing);
+    color: var(--accent-blue);
+    font-family: monospace;
+    font-size: 14px;
     border: 0;
-    cursor: pointer;
+    border-bottom: 2px solid white;
+    outline: 0;
+}
+.field-text-input--grow {
+    width: 100%;
+}
+
+.field-text-input:focus {
+    border-bottom-color: 2px solid var(--accent-blue);
 }

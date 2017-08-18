@@ -9,7 +9,12 @@ body {
     margin: 0;
     --accent: #ff5f05;
     --accent-hover: #dd5c05;
+    --accent-pressed: #b45305;
+    --accent-blue: #0099FF;
+    --inactive-grey: #EFEFEF;
+    --label-grey: #B9B9B9;
     --base-font-size: 18px;
+    --half-spacing: 10px;
     --base-spacing: 20px;
     --double-spacing: 40px;
     --width: 500px;
@@ -22,3 +27,30 @@ p {
 }
 
 @import "assets/fonts/material-icons.css";
+
+.field-title .material-icons {
+    color: var(--accent);
+}
+
+.field-title .material-icons:hover {
+    color: var(--accent-hover);
+}
+
+.field-title .material-icons:active {
+    color: var(--accent-pressed);
+}
+
+.field-item__controls .icon-button {
+    color: var(--inactive-grey);
+}
+
+.field-item:hover .field-item__controls .icon-button {
+    color: var(--accent);
+}
+
+.micro-label {
+    text-transform: uppercase;
+    color: var(--label-grey);
+    font-size: 10px;
+    font-family: Courier;
+}
