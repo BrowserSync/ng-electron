@@ -43,7 +43,7 @@
           <div class="field-item__inputs">
             <label attr.for="{{'dir' + i}}" class="micro-label">Dir</label>
             <div class="field-item__inline">
-              <button type="button" class="field-item__inline-button">
+              <button type="button" class="field-item__inline-button" (click)="addFolder(mapping, i)">
                 <i class="material-icons">create_new_folder</i>
               </button>
               <input formControlName="dir"

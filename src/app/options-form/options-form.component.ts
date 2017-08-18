@@ -6,6 +6,7 @@ import {Store} from "@ngrx/store";
 import {AppState} from "../app.component";
 import {OptionsActions, OptionsState, optionAction} from "./reducer";
 import {Observable} from "rxjs/Observable";
+import {GlobalActions} from "../../reducers/global";
 
 @Component({
     selector: 'app-options-form',
@@ -43,7 +44,12 @@ export class OptionsFormComponent implements OnInit {
     }
 
     addFolder(incoming: FormGroup, i) {
-        incoming.patchValue({dir: '/Users/shakyshane'});
+        // incoming.patchValue({dir: '/Users/shakyshane'});
+        this.store.dispatch({
+            type: GlobalActions.SELECT_PATH,
+            // payload: incoming.get('id').value
+            payload: i
+        });
     }
 
     deleteProxy(incoming: FormGroup, i) {

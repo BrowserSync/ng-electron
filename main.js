@@ -1,5 +1,5 @@
 // ./main.js
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, dialog} = require('electron');
 
 // const { default: installExtension, REDUX_DEVTOOLS } = require('electron-devtools-installer');
 //
@@ -39,3 +39,10 @@ app.on('window-all-closed', function () {
         app.quit();
     }
 });
+
+exports.selectDirectory = function selectDirectory(cb) {
+    // dialog.showOpenDialog as before
+    dialog.showOpenDialog(win, {
+        properties: ['openDirectory', 'multiSelections']
+    }, cb);
+};

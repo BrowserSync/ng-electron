@@ -10,6 +10,8 @@ import {  SortablejsModule } from 'angular-sortablejs';
 import {optionsReducer} from "./options-form/reducer";
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { IconComponent } from './icon/icon.component';
+import { EffectsModule } from '@ngrx/effects';
+import { DirEffects } from '../effects/dir';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,8 @@ import { IconComponent } from './icon/icon.component';
     }),
     StoreDevtoolsModule.instrument({
         maxAge: 25 //  Retains last 25 states
-    })
+    }),
+    EffectsModule.forRoot([DirEffects ])
   ],
   providers: [],
   bootstrap: [AppComponent]
