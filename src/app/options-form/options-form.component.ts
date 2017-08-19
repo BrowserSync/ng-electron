@@ -81,7 +81,7 @@ export class OptionsFormComponent implements OnInit {
         incoming.patchValue({active: !incoming.get('active').value});
     }
 
-    createProxy(id, sortOrder, target = '', active = false): FormGroup {
+    createProxy(id, sortOrder, target = '', active = true): FormGroup {
         const proxy: BsProxyCreate = {
             target: [target, [Validators.required, (item) => {
                 try {

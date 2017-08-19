@@ -20,6 +20,7 @@ export interface AppState {
 export class AppComponent {
   global: Observable<GlobalState>;
   options: Observable<OptionsState>;
+
   constructor(private store: Store<AppState>) {
 
       this.global = store.select('global');
@@ -28,11 +29,8 @@ export class AppComponent {
       ipcRenderer.send('win-ready');
 
       store.select('options')
-          .map((x, i) => {
-            // console.log(i);
-            return x
-          })
           .skip(4)
+          .debounceTime(500)
           .do(x => console.log('sending!', x))
           .do(options => ipcRenderer.send('options', options))
           .subscribe();

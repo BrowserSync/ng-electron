@@ -1,5 +1,7 @@
 // ./main.js
 const {app, BrowserWindow, dialog, ipcMain} = require('electron');
+const {init, Methods} = require('bs-lite');
+const {bs, system} = init();
 
 // const { default: installExtension, REDUX_DEVTOOLS } = require('electron-devtools-installer');
 //
@@ -32,8 +34,20 @@ function createWindow() {
     });
 }
 
+ipcMain.on('start', (event, data) => {
+    // console.log('');
+});
+
 ipcMain.on('options', (event, data) => {
     options = data;
+    bs.ask(Methods.Init, prepareForBs(options))
+        .subscribe(({errors, output}) => {
+            if (errors.length) {
+                console.log(errors)
+            } else {
+                console.log('Running at ', output.server.address());
+            }
+        })
 });
 
 ipcMain.on('win-ready', (event, data) => {
@@ -61,3 +75,19 @@ exports.selectDirectory = function selectDirectory(cb) {
     }, cb);
 };
 
+function prepareForBs(opts) {
+    const outputing = Object.assign({},
+        opts,
+        {
+            proxy: opts.proxies.filter(x => x.active).map(x => x.target),
+            server: {
+                port: opts.port
+            },
+            serveStatic: opts.mappings
+        }
+    );
+
+    console.log(JSON.stringify(outputing, null, 2));
+
+    return outputing;
+}
