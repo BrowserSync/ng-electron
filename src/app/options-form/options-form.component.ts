@@ -8,6 +8,7 @@ import {OptionsActions, OptionsState, optionAction} from "./reducer";
 import {Observable} from "rxjs/Observable";
 import {GlobalActions} from "../../reducers/global";
 import {selectDirectoryEffect} from "../../effects/selectDirectory";
+import {ipcRenderer} from 'electron';
 
 @Component({
     selector: 'app-options-form',
@@ -22,7 +23,20 @@ export class OptionsFormComponent implements OnInit {
     // directorySelection: Observable<{id: string, paths: string[]}>;
 
     constructor(private fb: FormBuilder, public store: Store<AppState>) {
-        // this.directorySelection = store.select('')
+        ipcRenderer.on('receive-options', (event, options) => {
+            const port = Number(options.port);
+            this.optionsForm.get('port').patchValue(port);
+            const gs = options.proxies.map((x: BsProxyValues) => {
+                return this.createProxy(x.id, x.sortOrder, x.target, x.active);
+            }).forEach(x => {
+                this.proxies.push(x);
+            });
+            const ms = options.mappings.map((x: MappingValues) => {
+                return this.createMapping(x.id, x.sortOrder, x.dir, x.route, x.active);
+            }).forEach(x => {
+                this.mappings.push(x);
+            });
+        });
     }
 
     get mappings(): FormArray {
@@ -67,9 +81,9 @@ export class OptionsFormComponent implements OnInit {
         incoming.patchValue({active: !incoming.get('active').value});
     }
 
-    createProxy(id, sortOrder): FormGroup {
+    createProxy(id, sortOrder, target = '', active = false): FormGroup {
         const proxy: BsProxyCreate = {
-            target: ['', [Validators.required, (item) => {
+            target: [target, [Validators.required, (item) => {
                 try {
                     const url = new URL(item.value);
                 } catch (e) {
@@ -81,7 +95,7 @@ export class OptionsFormComponent implements OnInit {
             }]],
             id,
             sortOrder,
-            active: true
+            active,
         }
         return this.fb.group(proxy);
     }
@@ -91,13 +105,13 @@ export class OptionsFormComponent implements OnInit {
         // console.log(this.mappings.controls.reverse());
     }
 
-    createMapping(id: string, sortOrder: number): FormGroup {
+    createMapping(id: string, sortOrder: number, dir = '', route = '', active = true): FormGroup {
         const mapping: MappingCreate = {
-            dir: ['', Validators.required],
-            route: ['', Validators.required],
+            dir: [dir, Validators.required],
+            route: [route, Validators.required],
             id,
             sortOrder,
-            active: true
+            active
         };
         return this.fb.group(mapping);
     }

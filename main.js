@@ -1,5 +1,5 @@
 // ./main.js
-const {app, BrowserWindow, dialog} = require('electron');
+const {app, BrowserWindow, dialog, ipcMain} = require('electron');
 
 // const { default: installExtension, REDUX_DEVTOOLS } = require('electron-devtools-installer');
 //
@@ -8,8 +8,12 @@ const {app, BrowserWindow, dialog} = require('electron');
 //     .catch((err) => console.log('An error occurred: ', err));
 
 let win = null;
+let options = null;
+let winReady = false;
 
-app.on('ready', function () {
+app.on('ready', createWindow);
+
+function createWindow() {
 
     // Initialize the window to our specified dimensions
     win = new BrowserWindow({width: 1200, height: 600});
@@ -24,8 +28,19 @@ app.on('ready', function () {
     // Remove window once app is closed
     win.on('closed', function () {
         win = null;
+        winReady = false;
     });
+}
 
+ipcMain.on('options', (event, data) => {
+    options = data;
+});
+
+ipcMain.on('win-ready', (event, data) => {
+    if (win && options) {
+        win.webContents.send('receive-options', options);
+    }
+    winReady = true;
 });
 
 app.on('activate', () => {
@@ -45,3 +60,4 @@ exports.selectDirectory = function selectDirectory(cb) {
         properties: ['openDirectory', 'openFile']
     }, cb);
 };
+
