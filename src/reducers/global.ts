@@ -2,13 +2,12 @@
 import { Action } from '@ngrx/store';
 
 export enum GlobalActions {
-    SELECT_PATH = 'SELECT_PATH',
-    SELECTED_PATHS = 'SELECTED_PATHS'
+
 }
 
 export interface GlobalState {
     active: boolean;
-    urls: string[]
+    urls: string[];
 }
 
 export const defaultState: GlobalState = {

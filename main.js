@@ -41,8 +41,7 @@ app.on('window-all-closed', function () {
 });
 
 exports.selectDirectory = function selectDirectory(cb) {
-    // dialog.showOpenDialog as before
     dialog.showOpenDialog(win, {
-        properties: ['openDirectory', 'multiSelections']
+        properties: ['openDirectory', 'openFile']
     }, cb);
 };

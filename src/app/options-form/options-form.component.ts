@@ -7,6 +7,7 @@ import {AppState} from "../app.component";
 import {OptionsActions, OptionsState, optionAction} from "./reducer";
 import {Observable} from "rxjs/Observable";
 import {GlobalActions} from "../../reducers/global";
+import {selectDirectoryEffect} from "../../effects/selectDirectory";
 
 @Component({
     selector: 'app-options-form',
@@ -17,9 +18,12 @@ export class OptionsFormComponent implements OnInit {
     optionsForm: FormGroup;
     draggerOptions = {handle: '.drag-move'};
     isValid = false;
-    valid$: Observable<boolean>
+    valid$: Observable<boolean>;
+    // directorySelection: Observable<{id: string, paths: string[]}>;
 
-    constructor(private fb: FormBuilder, public store: Store<AppState>) {}
+    constructor(private fb: FormBuilder, public store: Store<AppState>) {
+        // this.directorySelection = store.select('')
+    }
 
     get mappings(): FormArray {
         return <FormArray>this.optionsForm.get('mappings');
@@ -44,11 +48,10 @@ export class OptionsFormComponent implements OnInit {
     }
 
     addFolder(incoming: FormGroup, i) {
-        // incoming.patchValue({dir: '/Users/shakyshane'});
-        this.store.dispatch({
-            type: GlobalActions.SELECT_PATH,
-            // payload: incoming.get('id').value
-            payload: i
+        selectDirectoryEffect().then(paths => {
+            if (paths && paths.length) {
+                incoming.patchValue({dir: paths[0]})
+            }
         });
     }
 
