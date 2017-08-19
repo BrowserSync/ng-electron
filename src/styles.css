@@ -19,7 +19,6 @@ body {
     --double-spacing: 40px;
     --width: 500px;
     font-size: var(--base-font-size);
-    padding-top: var(--double-spacing);
 }
 
 p {
@@ -53,4 +52,11 @@ p {
     color: var(--label-grey);
     font-size: 10px;
     font-family: Courier;
+}
+
+.f-mono {
+    font-family: monospace;
+}
+.weight-normal {
+    font-weight: normal;
 }

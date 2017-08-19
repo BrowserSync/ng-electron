@@ -1,0 +1,9 @@
+:host .header {
+    padding: var(--half-spacing) var(--double-spacing);
+    background: var(--accent-blue);
+    color: white;
+}
+
+:host .main {
+    padding-top: var(--double-spacing);
+}

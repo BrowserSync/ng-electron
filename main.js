@@ -3,11 +3,11 @@ const {app, BrowserWindow, dialog, ipcMain} = require('electron');
 const {init, Methods} = require('bs-lite');
 const {bs, system} = init();
 
-// const { default: installExtension, REDUX_DEVTOOLS } = require('electron-devtools-installer');
-//
-// installExtension(REDUX_DEVTOOLS)
-//     .then((name) => console.log(`Added Extension:  ${name}`))
-//     .catch((err) => console.log('An error occurred: ', err));
+const { default: installExtension, REDUX_DEVTOOLS } = require('electron-devtools-installer');
+
+installExtension(REDUX_DEVTOOLS)
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => console.log('An error occurred: ', err));
 
 let win = null;
 let options = null;
@@ -15,6 +15,8 @@ let options = null;
 app.on('ready', createWindow);
 
 function createWindow() {
+
+  console.log('NEW WINDOW BRA');
 
   // Initialize the window to our specified dimensions
   win = new BrowserWindow({width: 1200, height: 600});
@@ -38,14 +40,15 @@ function createWindow() {
 
 ipcMain.on('options', (event, data) => {
   options = data;
-  bs.ask(Methods.Init, prepareForBs(options))
-    .subscribe(({errors, output}) => {
-      if (errors.length) {
-        console.log(errors)
-      } else {
-        console.log('Running at ', output.server.address());
-      }
-    })
+  prepareForBs(options);
+  // bs.ask(Methods.Init, prepareForBs(options))
+  //   .subscribe(({errors, output}) => {
+  //     if (errors.length) {
+  //       console.log(errors)
+  //     } else {
+  //       console.log('Running at ', output.server.address());
+  //     }
+  //   })
 });
 
 // ipcMain.on('win-ready', (event, data) => {
@@ -67,6 +70,21 @@ app.on('window-all-closed', function () {
   }
 });
 
+exports.initBs = function initBs(options, cb) {
+  const bsOptions = prepareForBs(options);
+  bs.ask(Methods.Init, bsOptions)
+    .do(({errors, output}) => {
+      if (errors.length) {
+        return cb(errors[0]);
+      } else {
+        return cb(null, output.server.address().port);
+      }
+    })
+    .subscribe(() => {
+
+    }, err => console.log(err));
+}
+
 exports.selectDirectory = function selectDirectory(cb) {
   dialog.showOpenDialog(win, {
     properties: ['openDirectory', 'openFile']
@@ -84,7 +102,7 @@ function prepareForBs(opts) {
       port: Number(opts.port)
     },
     serveStatic: opts.mappings
-  }
+  };
 
   console.log(JSON.stringify(outputing, null, 2));
 

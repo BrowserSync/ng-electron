@@ -7,10 +7,12 @@ import { OptionsFormComponent } from './options-form/options-form.component';
 import { StoreModule } from '@ngrx/store';
 import { globalReducer } from '../reducers/global';
 import {  SortablejsModule } from 'angular-sortablejs';
-import {optionsReducer} from "./options-form/reducer";
+import {optionsReducer} from './options-form/reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { IconComponent } from './icon/icon.component';
 import { EffectsModule } from '@ngrx/effects';
+import {StatusComponent} from './status/status.component';
+import {GlobalEffects} from "../effects/global";
 // import { DirEffects } from '../effects/dir';
 
 @NgModule({
@@ -18,6 +20,7 @@ import { EffectsModule } from '@ngrx/effects';
     AppComponent,
     OptionsFormComponent,
     IconComponent,
+    StatusComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,7 +33,7 @@ import { EffectsModule } from '@ngrx/effects';
     StoreDevtoolsModule.instrument({
         maxAge: 25 //  Retains last 25 states
     }),
-    // EffectsModule.forRoot([DirEffects ])
+    EffectsModule.forRoot([ GlobalEffects ])
   ],
   providers: [],
   bootstrap: [AppComponent]

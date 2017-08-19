@@ -13,7 +13,12 @@ export interface AppState {
 @Component({
   selector: 'app-root',
   template: `
-    <app-options-form></app-options-form>
+    <header class="header">
+        <app-status></app-status>
+    </header>
+    <main class="main">
+        <app-options-form></app-options-form>
+    </main>
   `,
   styleUrls: ['./app.component.css']
 })
@@ -28,7 +33,6 @@ export class AppComponent {
 
       store.select('options')
           .skip(1)
-          .do(x => console.log('sending', x))
           .debounceTime(500)
           .do(x => console.log('sending!', x))
           .do(options => ipcRenderer.send('options', options))
