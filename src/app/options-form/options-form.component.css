@@ -11,6 +11,13 @@
     margin-bottom: var(--half-spacing);
 }
 
+.field-title__error {
+    text-transform: none;
+    color: red;
+    font-weight: normal;
+    font-size: .8rem;
+}
+
 .field-item {
 }
 
@@ -76,10 +83,16 @@
     border-bottom: 2px solid white;
     outline: 0;
 }
+
 .field-text-input--grow {
     width: 100%;
 }
 
 .field-text-input:focus {
     border-bottom-color: 2px solid var(--accent-blue);
+}
+
+.field-text-input.ng-invalid.ng-touched {
+    color: red;
+    border-bottom-color: red;
 }

@@ -1,11 +1,11 @@
 <form [formGroup]="optionsForm" novalidate>
-  <div class="field">
-    <p class="field-title">Port</p>
+  <div class="field" [ngClass]="{'field--invalid': optionsForm.get('port').invalid}">
+    <p class="field-title">Port <small *ngIf="optionsForm.get('port').invalid" class="field-title__error">Enter a number between 1024 & 999</small></p>
     <input
-            formControlName="port"
-            type="text"
-            placeholder="eg: 3200"
-            class="field-text-input"
+          formControlName="port"
+          type="text"
+          placeholder="eg: 3200"
+          class="field-text-input"
     />
   </div>
   <div class="field">

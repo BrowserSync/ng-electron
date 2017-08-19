@@ -122,7 +122,15 @@ export class OptionsFormComponent implements OnInit {
                 Validators.required,
                 Validators.minLength(4),
                 Validators.maxLength(5),
-                Validators.pattern('\\d+')
+                Validators.pattern('\\d+'),
+                (item) => {
+                    if (item.value > 1023 && item.value < 10000) {
+                        return null;
+                    }
+                    return {
+                        outOfRange: true
+                    };
+                }
             ]],
             mappings: this.fb.array([]),
             proxies: this.fb.array([]),

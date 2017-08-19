@@ -26,10 +26,9 @@ export class AppComponent {
       this.global = store.select('global');
       this.options = store.select('options');
 
-      ipcRenderer.send('win-ready');
-
       store.select('options')
-          .skip(4)
+          .skip(1)
+          .do(x => console.log('sending', x))
           .debounceTime(500)
           .do(x => console.log('sending!', x))
           .do(options => ipcRenderer.send('options', options))
