@@ -1,4 +1,4 @@
-// ./effects/auth.ts
+ // ./effects/auth.ts
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
@@ -20,27 +20,39 @@ export class GlobalEffects {
     @Effect() dirs$: Observable<Action> = this.actions$.ofType(GlobalActions.BsInit)
     // Map the payload into JSON to use as the request body
         .mergeMap((action) => {
+
+            const setup = create((obs) => {
+                initBs((action as any).payload, (err, res) => {
+                    if (err) {
+                        return obs.error(err);
+                    }
+                    obs.next(res);
+                    obs.complete();
+                })
+            });
+
             return concat(
                 of({type: GlobalActions.SetStatus, payload: Status.Pending}),
-                create((obs) => {
-                    initBs((action as any).payload, (err, res) => {
-                        if (err) {
-                            return obs.error(err);
-                        }
-                        obs.next(res);
-                        obs.complete();
+                minimumTimeout(setup)
+                    .flatMap((port) => {
+                        return concat(
+                            of({type: GlobalActions.SetStatus, payload: Status.Active}),
+                            // of({type: GlobalActions.SetBrowsersyncOptions, payload: options}),
+                            of({type: GlobalActions.SetBrowsersyncPort, payload: port})
+                        )
                     })
-                }).flatMap((port) => {
-                    return concat(
-                        of({type: GlobalActions.SetStatus, payload: Status.Active}),
-                        // of({type: GlobalActions.SetBrowsersyncOptions, payload: options}),
-                        of({type: GlobalActions.SetBrowsersyncPort, payload: port})
-                    )
-                })
             );
         });
 
     constructor(
         private actions$: Actions
     ) {}
+}
+
+function minimumTimeout(inputObservable: Observable<any>): Observable<any> {
+    return Observable.zip(
+        inputObservable,
+        Observable.timer(500),
+        (output) => output
+    )
 }

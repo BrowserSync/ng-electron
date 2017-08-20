@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {Store} from "@ngrx/store";
-import {GlobalActions, GlobalState} from "../reducers/global";
+import {GlobalActions, GlobalState, Status} from "../reducers/global";
 import {Observable} from "rxjs/Observable";
 import {optionAction, OptionsActions, OptionsState} from "./options-form/reducer";
 import {ipcRenderer} from 'electron';
@@ -34,6 +34,10 @@ export class AppComponent {
       store.select('options')
           .skip(1)
           .debounceTime(500)
+          .withLatestFrom(this.global)
+          .filter(([options, globalState]) => {
+            return globalState.status === Status.Active
+          })
           .do(x => console.log('sending!', x))
           .do(options => store.dispatch({type: GlobalActions.BsInit, payload: options}))
           .subscribe();

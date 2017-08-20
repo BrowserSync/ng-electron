@@ -29,6 +29,10 @@ function createWindow() {
     // Remove window once app is closed
     win.on('closed', function () {
         win = null;
+        bs.ask(Methods.Stop)
+          .subscribe(() => {
+                console.log('Stopped!');
+          });
     });
 }
 
@@ -61,13 +65,6 @@ ipcMain.on('options', (event, data) => {
         })
         .subscribe()
 });
-
-// ipcMain.on('win-ready', (event, data) => {
-//     if (win && options) {
-//         win.webContents.send('receive-options', options);
-//     }
-//     winReady = true;
-// });
 
 app.on('activate', () => {
     if (win === null) {
