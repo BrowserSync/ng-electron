@@ -40,7 +40,7 @@
       <div class="field-item" formArrayName="mappings" *ngFor="let mapping of mappings.controls; let i=index">
         <div class="field-item__bar" [formGroupName]="i">
           <div class="field-item__inputs">
-            <label attr.for="{{'dir' + i}}" class="micro-label">Dir</label>
+            <label attr.for="{{'dir' + i}}" class="micro-label">Local Path</label>
             <div class="field-item__inline">
               <button type="button" class="field-item__inline-button" (click)="addFolder(mapping, i)">
                 <i class="material-icons">create_new_folder</i>
@@ -50,7 +50,7 @@
                      placeholder="eg: /Users/shakyshane/sites/wp/wp-content"
                      class="field-text-input field-text-input--grow">
             </div>
-            <label attr.for="{{'route' + i}}" class="micro-label">Route</label>
+            <label attr.for="{{'route' + i}}" class="micro-label">Remote Path</label>
             <div class="field-item__inline">
                                     <span class="field-item__inline-button cursor-default">
                                         <i class="material-icons">language</i>
