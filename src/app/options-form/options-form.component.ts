@@ -1,5 +1,5 @@
 import 'rxjs/Rx';
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, ViewChildren, QueryList, ElementRef} from '@angular/core';
 import {FormGroup, FormControl, FormBuilder, Validators, FormArray} from '@angular/forms';
 import * as uuid from 'uuid/v4';
 import {Store} from "@ngrx/store";
@@ -22,6 +22,8 @@ export class OptionsFormComponent implements OnInit {
     draggerOptions = {handle: '.drag-move'};
     isValid = false;
     valid$: Observable<boolean>;
+    @ViewChildren('proxies') proxyChildren: QueryList<ElementRef>;
+    @ViewChildren('mappings') mappingChildren: QueryList<ElementRef>;
     // directorySelection: Observable<{id: string, paths: string[]}>;
 
     constructor(private fb: FormBuilder, public store: Store<AppState>) {}
@@ -36,12 +38,18 @@ export class OptionsFormComponent implements OnInit {
 
     addMapping() {
         const id = uuid();
-        this.mappings.push(this.createMapping(id, this.mappings.controls.length))
+        this.mappings.push(this.createMapping(id, this.mappings.controls.length));
+        this.mappingChildren.changes.take(1).subscribe(children => {
+            children.last.nativeElement.focus();
+        });
     }
 
     addProxy() {
         const id = uuid();
-        this.proxies.push(this.createProxy(id, this.mappings.controls.length))
+        this.proxies.push(this.createProxy(id, this.mappings.controls.length));
+        this.proxyChildren.changes.take(1).subscribe(children => {
+            children.last.nativeElement.focus();
+        });
     }
 
     deleteMapping(incoming: FormGroup, i) {

@@ -18,6 +18,7 @@
         <div class="field-item__bar" [formGroupName]="i">
           <div class="field-item__inputs">
             <input formControlName="target"
+                   #proxies
                    id="{{'proxy' + i}}"
                    placeholder="eg: http://example.com"
                    class="field-text-input field-text-input--grow" />
@@ -47,6 +48,7 @@
               </button>
               <input formControlName="dir"
                      id="{{'dir' + i}}"
+                     #mappings
                      placeholder="eg: /Users/shakyshane/sites/wp/wp-content"
                      class="field-text-input field-text-input--grow">
             </div>
