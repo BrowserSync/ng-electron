@@ -30,11 +30,10 @@ export class BsInitEffect {
             return concat(
                 of(setStatus(Status.Pending)),
                 minimumTimeout(setup)
-                    .flatMap((port) => {
+                    .flatMap((output) => {
                         return concat(
                             of(setStatus(Status.Active)),
-                            // of({type: GlobalActions.SetBrowsersyncOptions, payload: options}),
-                            of({type: GlobalActions.SetBrowsersyncPort, payload: port})
+                            of({type: GlobalActions.SetBrowsersyncOptions, payload: output}),
                         )
                     })
             );

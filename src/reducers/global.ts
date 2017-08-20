@@ -18,7 +18,7 @@ export enum GlobalActions {
     SetStatus = 'SetStatus',
     SetFormStatus = 'SetFormStatus',
     SetBrowsersyncOptions = 'SetBrowsersyncOptions',
-    SetBrowsersyncPort = 'SetBrowsersyncPort',
+    ResetBrowsersyncOptions = 'ResetBrowsersyncOptions',
     BsInit = 'BsInit',
     BsStop = 'BsStop',
 }
@@ -58,15 +58,22 @@ export function globalReducer(state = defaultState, action: IAction<any>): Globa
         case GlobalActions.SetBrowsersyncOptions: {
             return {
                 ...state,
-                bsOptions: action.payload
+                ...action.payload
             }
         }
-        case GlobalActions.SetBrowsersyncPort: {
+        case GlobalActions.ResetBrowsersyncOptions: {
             return {
                 ...state,
-                port: Number(action.payload)
+                urls: [],
+                port: null
             }
         }
+        // case GlobalActions.SetBrowsersyncPort: {
+        //     return {
+        //         ...state,
+        //         port: Number(action.payload)
+        //     }
+        // }
         default:
             return state;
     }

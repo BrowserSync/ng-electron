@@ -30,7 +30,7 @@ export class BsStopEffect {
                     .flatMap(() => {
                         return concat(
                             of(setStatus(Status.Idle)),
-                            of({type: GlobalActions.SetBrowsersyncPort, payload: null})
+                            of({type: GlobalActions.ResetBrowsersyncOptions})
                         )
                     })
                     .catch(err => {

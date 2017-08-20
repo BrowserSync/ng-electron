@@ -24,7 +24,7 @@ function createWindow() {
 
     // Show dev tools
     // Remove this line before distributing
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
 
     // Remove window once app is closed
     win.on('closed', function () {
@@ -92,12 +92,26 @@ exports.initBs = function initBs(options, cb) {
             if (errors.length) {
                 return cb(errors[0]);
             } else {
-                return cb(null, output.server.address().port);
+                const port = output.server.address().port;
+                const ex = require('dev-ip')();
+                const urls = getUrls(port, ex, output.options.toJS());
+                return cb(null, {
+                    port: output.server.address().port,
+                    urls,
+                });
             }
         })
         .subscribe(() => {
 
         }, err => console.log(err));
+}
+
+function getUrls(port, ip, options) {
+    return [
+      `${options.scheme}://localhost:${port}`,
+      `${options.scheme}://${ip}:${port}`,
+      `${options.scheme}://${ip}.xip.io:${port}`,
+    ]
 }
 
 exports.selectDirectory = function selectDirectory(cb) {

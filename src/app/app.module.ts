@@ -12,6 +12,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { IconComponent } from './icon/icon.component';
 import { EffectsModule } from '@ngrx/effects';
 import { StatusComponent } from './status/status.component';
+import { AccessComponent } from './access/access.component';
 import { BsInitEffect } from "../effects/BsInitEffect";
 import { BsStopEffect } from "../effects/BsStopEffect";
 
@@ -21,6 +22,7 @@ import { BsStopEffect } from "../effects/BsStopEffect";
     OptionsFormComponent,
     IconComponent,
     StatusComponent,
+    AccessComponent
   ],
   imports: [
     BrowserModule,

@@ -91,6 +91,13 @@ p {
     margin-right: var(--base-spacing);
 }
 
+.mr-10 {
+    margin-right: 10px;
+}
+.ml-10 {
+    margin-left: 10px;
+}
+
 .btn {
     background: none;
     border: 0;

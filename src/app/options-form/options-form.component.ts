@@ -1,5 +1,5 @@
 import 'rxjs/Rx';
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormGroup, FormControl, FormBuilder, Validators, FormArray} from '@angular/forms';
 import * as uuid from 'uuid/v4';
 import {Store} from "@ngrx/store";
@@ -14,7 +14,8 @@ import {setFormStatus} from "../../reducers/global-actions";
 @Component({
     selector: 'app-options-form',
     templateUrl: './options-form.component.html',
-    styleUrls: ['./options-form.component.css']
+    styleUrls: ['./options-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OptionsFormComponent implements OnInit {
     optionsForm: FormGroup;

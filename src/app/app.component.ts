@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {Store} from "@ngrx/store";
 import {GlobalActions, GlobalState, Status} from "../reducers/global";
 import {Observable} from "rxjs/Observable";
@@ -15,11 +15,13 @@ export interface AppState {
   selector: 'app-root',
   template: `
     <app-status></app-status>
+    <app-access></app-access>
     <main class="main">
         <app-options-form></app-options-form>
     </main>
   `,
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
   global: Observable<GlobalState>;

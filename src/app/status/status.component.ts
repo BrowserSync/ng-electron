@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppState} from '../app.component';
 import {FormStatus, GlobalActions, GlobalState, Status} from "../../reducers/global";
@@ -22,6 +22,8 @@ import {Observable} from "rxjs/Observable";
     `,
     styles: [`
         :host .status {
+            position: relative;
+            z-index: 2;
             display: flex;
             font-size: .8rem;
             align-items: center;
@@ -29,7 +31,8 @@ import {Observable} from "rxjs/Observable";
             background-colour: var(--accent-blue);
             color: white;
         }
-    `]
+    `],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatusComponent implements OnInit {
     global: Observable<GlobalState>;
