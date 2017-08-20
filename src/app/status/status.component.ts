@@ -10,8 +10,8 @@ import {Observable} from "rxjs/Observable";
         <header class="status" [ngClass]="statusClass|async">
             <div class="mr">
                 <button type="button" 
-                        class="btn btn-icon c-white" 
-                        [disabled]="isPending|async"
+                        class="btn btn-icon c-white"
+                        [disabled]="isDisabled|async"
                         [ngClass]="{'ani-spin': (global | async).status === 'Pending'}"
                         (click)="setStatus()">
                     <i class="material-icons">{{icon | async}}</i>
@@ -41,11 +41,21 @@ export class StatusComponent implements OnInit {
     formStatus: Observable<FormStatus>;
     statusClass: Observable<string>;
     isPending: Observable<boolean>;
+    isDisabled: Observable<boolean>;
 
     constructor(private store: Store<AppState>) {
         this.global = store.select('global');
         this.status = store.select('global').map(x => x.status);
+        const formStatus = store.select('global').map(x => x.formStatus);
         this.isPending = store.select('global').map(x => x.status === Status.Pending);
+        this.isDisabled = this.isPending.combineLatest(formStatus)
+            .map(([pending, formStatus]) => {
+                if (pending) return true;
+                if (formStatus === FormStatus.Invalid) {
+                    return true
+                }
+                return false;
+            });
         this.formStatus = store.select('global').map(x => x.formStatus);
         this.statusClass = this.status.map((status: Status) => {
             switch (status) {

@@ -107,6 +107,10 @@ p {
     line-height: 24px;
     outline: 0;
 }
+.btn[disabled] {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
 
 .ani-spin {
     animation: spin .3s infinite linear;
