@@ -14,9 +14,7 @@ export interface AppState {
 @Component({
   selector: 'app-root',
   template: `
-    <header class="header">
-        <app-status></app-status>
-    </header>
+    <app-status></app-status>
     <main class="main">
         <app-options-form></app-options-form>
     </main>

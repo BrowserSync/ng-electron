@@ -13,6 +13,12 @@ body {
     --accent-blue: #0099FF;
     --inactive-grey: #EFEFEF;
     --label-grey: #B9B9B9;
+
+    --colour-orange: var(--accent);
+    --colour-green: #5fa55f;
+    --colour-red: red;
+    --colour-blue: var(--accent-blue);
+
     --base-font-size: 18px;
     --half-spacing: 10px;
     --base-spacing: 20px;
@@ -59,4 +65,47 @@ p {
 }
 .weight-normal {
     font-weight: normal;
+}
+
+@keyframes spin {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+}
+
+.c-white {
+    color: white;
+}
+.bg-green {
+    background-color: var(--colour-green);
+}
+.bg-blue {
+    background-color: var(--accent-blue);
+}
+.bg-red {
+    background-color: var(--colour-red);
+}
+.ml {
+    margin-left: var(--base-spacing);
+}
+.mr {
+    margin-right: var(--base-spacing);
+}
+
+.btn {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+    height: 24px;
+    line-height: 24px;
+    outline: 0;
+}
+
+.ani-spin {
+    animation: spin .3s infinite linear;
+}
+
+.btn:hover {
+    transition: all .2s;
+    transform: scale(1.1);
 }
