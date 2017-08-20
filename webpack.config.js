@@ -87,7 +87,7 @@ module.exports = {
     ]
   },
   "output": {
-    "path": path.join(process.cwd(), "dist"),
+    "path": path.join(process.cwd(), "ng-dist"),
     "filename": "[name].bundle.js",
     "chunkFilename": "[id].chunk.js"
   },
@@ -447,7 +447,9 @@ module.exports = {
     "process": true,
     "module": false,
     "clearImmediate": false,
-    "setImmediate": false
+    "setImmediate": false,
+    __dirname: false,
+    __filename: false
   },
   "devServer": {
     "historyApiFallback": true
