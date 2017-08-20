@@ -6,6 +6,7 @@
 /out-tsc
 /ng-dist
 .env
+/build-assets/Certificates.p12
 
 # dependencies
 /node_modules

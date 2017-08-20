@@ -1,6 +1,6 @@
 {
   "name": "bs-ng-electron",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "productName": "Browsersync Alter",
   "scripts": {
@@ -85,6 +85,12 @@
     "webpack-dev-server": "~2.5.1"
   },
   "build": {
-    "appId": "com.Browsersync.Alter"
+    "files": "!build-assets${/*}",
+    "appId": "com.Browsersync.Alter",
+    "forceCodeSigning": true,
+    "mac": {
+      "category": "public.app-category.video",
+      "type": "distribution"
+    }
   }
 }
