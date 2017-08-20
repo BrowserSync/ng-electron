@@ -35,7 +35,7 @@ export class AppComponent {
           .skip(1)
           .debounceTime(500)
           .do(x => console.log('sending!', x))
-          .do(options => ipcRenderer.send('options', options))
+          .do(options => store.dispatch({type: GlobalActions.BsInit, payload: options}))
           .subscribe();
   }
 }
