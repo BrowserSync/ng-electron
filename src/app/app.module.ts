@@ -11,9 +11,9 @@ import {optionsReducer} from './options-form/reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { IconComponent } from './icon/icon.component';
 import { EffectsModule } from '@ngrx/effects';
-import {StatusComponent} from './status/status.component';
-import {GlobalEffects} from "../effects/global";
-// import { DirEffects } from '../effects/dir';
+import { StatusComponent } from './status/status.component';
+import { BsInitEffect } from "../effects/BsInitEffect";
+import { BsStopEffect } from "../effects/BsStopEffect";
 
 @NgModule({
   declarations: [
@@ -33,7 +33,7 @@ import {GlobalEffects} from "../effects/global";
     StoreDevtoolsModule.instrument({
         maxAge: 25 //  Retains last 25 states
     }),
-    EffectsModule.forRoot([ GlobalEffects ])
+    EffectsModule.forRoot([ BsInitEffect, BsStopEffect ])
   ],
   providers: [],
   bootstrap: [AppComponent]

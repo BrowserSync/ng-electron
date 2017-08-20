@@ -1,6 +1,4 @@
- // ./effects/auth.ts
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
@@ -9,13 +7,11 @@ import {GlobalActions, Status} from "../reducers/global";
 const {concat, of, defer, create, from} = Observable;
 
 import {remote} from 'electron';
+import {setStatus} from "../reducers/global-actions";
 const {initBs} = remote.require('./main');
 
-// const {init, Methods} = require('bs-lite');
-// const {bs, system} = init();
-
 @Injectable()
-export class GlobalEffects {
+export class BsInitEffect {
     // Listen for the 'LOGIN' action
     @Effect() dirs$: Observable<Action> = this.actions$.ofType(GlobalActions.BsInit)
     // Map the payload into JSON to use as the request body
@@ -32,11 +28,11 @@ export class GlobalEffects {
             });
 
             return concat(
-                of({type: GlobalActions.SetStatus, payload: Status.Pending}),
+                of(setStatus(Status.Pending)),
                 minimumTimeout(setup)
                     .flatMap((port) => {
                         return concat(
-                            of({type: GlobalActions.SetStatus, payload: Status.Active}),
+                            of(setStatus(Status.Active)),
                             // of({type: GlobalActions.SetBrowsersyncOptions, payload: options}),
                             of({type: GlobalActions.SetBrowsersyncPort, payload: port})
                         )
@@ -49,7 +45,7 @@ export class GlobalEffects {
     ) {}
 }
 
-function minimumTimeout(inputObservable: Observable<any>): Observable<any> {
+export function minimumTimeout(inputObservable: Observable<any>): Observable<any> {
     return Observable.zip(
         inputObservable,
         Observable.timer(500),

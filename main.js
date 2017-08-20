@@ -78,6 +78,13 @@ app.on('window-all-closed', function () {
     }
 });
 
+exports.stopBs = function(cb) {
+  bs.ask(Methods.Stop)
+    .subscribe(() => {
+      cb();
+    });
+}
+
 exports.initBs = function initBs(options, cb) {
     const bsOptions = prepareForBs(options);
     bs.ask(Methods.Init, bsOptions)

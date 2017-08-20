@@ -9,6 +9,7 @@ import {Observable} from "rxjs/Observable";
 import {FormStatus, GlobalActions} from "../../reducers/global";
 import {selectDirectoryEffect} from "../../effects/selectDirectory";
 import {ipcRenderer} from 'electron';
+import {setFormStatus} from "../../reducers/global-actions";
 
 @Component({
     selector: 'app-options-form',
@@ -22,22 +23,7 @@ export class OptionsFormComponent implements OnInit {
     valid$: Observable<boolean>;
     // directorySelection: Observable<{id: string, paths: string[]}>;
 
-    constructor(private fb: FormBuilder, public store: Store<AppState>) {
-        // ipcRenderer.on('receive-options', (event, options) => {
-        //     const port = Number(options.port);
-        //     this.optionsForm.get('port').patchValue(port);
-        //     const gs = options.proxies.map((x: BsProxyValues) => {
-        //         return this.createProxy(x.id, x.sortOrder, x.target, x.active);
-        //     }).forEach(x => {
-        //         this.proxies.push(x);
-        //     });
-        //     const ms = options.mappings.map((x: MappingValues) => {
-        //         return this.createMapping(x.id, x.sortOrder, x.dir, x.route, x.active);
-        //     }).forEach(x => {
-        //         this.mappings.push(x);
-        //     });
-        // });
-    }
+    constructor(private fb: FormBuilder, public store: Store<AppState>) {}
 
     get mappings(): FormArray {
         return <FormArray>this.optionsForm.get('mappings');
@@ -154,14 +140,14 @@ export class OptionsFormComponent implements OnInit {
             .withLatestFrom(form.valueChanges)
             .subscribe(([_, values]) => {
                 const options: OptionsState = values;
-                this.store.dispatch({type: GlobalActions.SetFormStatus, payload: FormStatus.Valid});
+                this.store.dispatch(setFormStatus(FormStatus.Valid));
                 this.store.dispatch(optionAction(OptionsActions.UPDATE, options))
             });
 
         // The 'invalid' stream could be used to disable buttons etc
         invalid
-            .subscribe(invalid => {
-                this.store.dispatch({type: GlobalActions.SetFormStatus, payload: FormStatus.Invalid});
+            .subscribe(() => {
+                this.store.dispatch(setFormStatus(FormStatus.Invalid));
             });
     }
 }

@@ -4,6 +4,7 @@ import {GlobalActions, GlobalState, Status} from "../reducers/global";
 import {Observable} from "rxjs/Observable";
 import {optionAction, OptionsActions, OptionsState} from "./options-form/reducer";
 import {ipcRenderer} from 'electron';
+import {initBs} from "../reducers/global-actions";
 
 export interface AppState {
   global: GlobalState;
@@ -38,8 +39,9 @@ export class AppComponent {
           .filter(([options, globalState]) => {
             return globalState.status === Status.Active
           })
+          .map(([options, globalState]) => options)
           .do(x => console.log('sending!', x))
-          .do(options => store.dispatch({type: GlobalActions.BsInit, payload: options}))
+          .do(options => store.dispatch(initBs(options)))
           .subscribe();
   }
 }
