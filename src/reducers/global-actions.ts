@@ -21,3 +21,10 @@ export function initBs(options: OptionsState) {
         payload: options
     }
 }
+
+export function receivePaths(paths: any[]) {
+    return {
+        type: GlobalActions.ReceivePaths,
+        payload: paths
+    }
+}

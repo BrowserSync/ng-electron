@@ -15,6 +15,7 @@ import { StatusComponent } from './status/status.component';
 import { AccessComponent } from './access/access.component';
 import { BsInitEffect } from "../effects/BsInitEffect";
 import { BsStopEffect } from "../effects/BsStopEffect";
+import {ReceivePathsEffect} from "../effects/receivePathsEffect";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,7 @@ import { BsStopEffect } from "../effects/BsStopEffect";
     StoreDevtoolsModule.instrument({
         maxAge: 25 //  Retains last 25 states
     }),
-    EffectsModule.forRoot([ BsInitEffect, BsStopEffect ])
+    EffectsModule.forRoot([ BsInitEffect, BsStopEffect, ReceivePathsEffect ])
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -4,7 +4,7 @@ import {GlobalActions, GlobalState, Status} from "../reducers/global";
 import {Observable} from "rxjs/Observable";
 import {optionAction, OptionsActions, OptionsState} from "./options-form/reducer";
 import {ipcRenderer} from 'electron';
-import {initBs} from "../reducers/global-actions";
+import {initBs, receivePaths} from "../reducers/global-actions";
 
 export interface AppState {
   global: GlobalState;
@@ -31,6 +31,10 @@ export class AppComponent {
 
       this.global = store.select('global');
       this.options = store.select('options');
+
+      ipcRenderer.on('paths', function(evt, data) {
+          store.dispatch(receivePaths(data))
+      });
 
       store.select('options')
           .skip(1)

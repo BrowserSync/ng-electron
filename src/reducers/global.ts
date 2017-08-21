@@ -21,6 +21,7 @@ export enum GlobalActions {
     ResetBrowsersyncOptions = 'ResetBrowsersyncOptions',
     BsInit = 'BsInit',
     BsStop = 'BsStop',
+    ReceivePaths = 'ReceivePaths',
 }
 
 export interface GlobalState {

@@ -1,14 +1,32 @@
 // ./main.js
 const {app, BrowserWindow, dialog, ipcMain} = require('electron');
 const {init, Methods} = require('bs-lite');
+const {BehaviorSubject, Subject} = require('rxjs');
 const {bs, system} = init();
 const {join} = require('path');
 const {format} = require('url');
+const {Set, List} = require('immutable');
 
 require('dotenv').config();
 
 let win = null;
 let options = null;
+const path$ = new BehaviorSubject(Set([]));
+const pathsSub$ = new Subject();
+
+pathsSub$.scan((acc, incomingList) => {
+  return acc.add(incomingList);
+}, path$.getValue())
+    .subscribe(path$);
+
+path$
+    .distinctUntilChanged()
+    .sampleTime(500)
+    .subscribe(x => {
+        if (win) {
+          win.webContents.send('paths', x.toJS());
+        }
+    })
 
 app.on('ready', createWindow);
 
@@ -137,7 +155,14 @@ function prepareForBs(opts) {
 
   const outputing = {
     scheme: hasHttps ? 'https' : 'http',
-    proxy: activeProxies.map(x => x.target),
+    proxy: activeProxies.map(proxy => {
+      return {
+        target: proxy.target,
+        proxyRes: [(proxyRes, req, res) => {
+          pathsSub$.next(List([req.url, proxyRes.headers['content-type']]))
+        }]
+      }
+    }),
     server: {
       port: Number(opts.port)
     },
