@@ -28,6 +28,7 @@ export interface GlobalState {
     port: number|null;
     status: Status;
     active: boolean;
+    paths: [string, string][]
     urls: string[];
     formStatus: FormStatus
     bsOptions: any
@@ -38,6 +39,7 @@ export const defaultState: GlobalState = {
     status: Status.Idle,
     active: false,
     urls: [],
+    paths: [],
     formStatus: FormStatus.Valid,
     bsOptions: null
 };
@@ -67,6 +69,12 @@ export function globalReducer(state = defaultState, action: IAction<any>): Globa
                 ...state,
                 urls: [],
                 port: null
+            }
+        }
+        case GlobalActions.ReceivePaths: {
+            return {
+                ...state,
+                paths: action.payload,
             }
         }
         // case GlobalActions.SetBrowsersyncPort: {
