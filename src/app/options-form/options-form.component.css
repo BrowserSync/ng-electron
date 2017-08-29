@@ -96,3 +96,11 @@
     color: red;
     border-bottom-color: red;
 }
+
+.path-list {
+
+}
+.path-item {
+    font-size: 10px;
+    font-family: monospace;
+}

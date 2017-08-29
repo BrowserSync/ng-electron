@@ -5,13 +5,13 @@ const {BehaviorSubject, Subject} = require('rxjs');
 const {bs, system} = init();
 const {join} = require('path');
 const {format} = require('url');
-const {Set, List} = require('immutable');
+const {OrderedSet, List} = require('immutable');
 
 require('dotenv').config();
 
 let win = null;
 let options = null;
-const path$ = new BehaviorSubject(Set([]));
+const path$ = new BehaviorSubject(OrderedSet([]));
 const pathsSub$ = new Subject();
 
 pathsSub$.scan((acc, incomingList) => {
@@ -33,6 +33,7 @@ app.on('ready', createWindow);
 function createWindow() {
 
   // Initialize the window to our specified dimensions
+  path$.next(OrderedSet([]));
   win = new BrowserWindow({
     width: 1000,
     height: 600,
@@ -141,6 +142,11 @@ function getUrls(port, ip, options) {
     `${options.scheme}://${ip}:${port}`,
     `${options.scheme}://${ip}.xip.io:${port}`,
   ]
+}
+
+exports.setAppStatus = function(status, cb) {
+    console.log(status);
+    cb();
 }
 
 exports.selectDirectory = function selectDirectory(cb) {

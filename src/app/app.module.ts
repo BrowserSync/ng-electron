@@ -16,6 +16,7 @@ import { AccessComponent } from './access/access.component';
 import { BsInitEffect } from "../effects/BsInitEffect";
 import { BsStopEffect } from "../effects/BsStopEffect";
 import {ReceivePathsEffect} from "../effects/receivePathsEffect";
+import {AppStatusEffect} from "../effects/AppStatus";
 
 @NgModule({
   declarations: [
@@ -36,7 +37,12 @@ import {ReceivePathsEffect} from "../effects/receivePathsEffect";
     StoreDevtoolsModule.instrument({
         maxAge: 25 //  Retains last 25 states
     }),
-    EffectsModule.forRoot([ BsInitEffect, BsStopEffect, ReceivePathsEffect ])
+    EffectsModule.forRoot([
+        BsInitEffect,
+        BsStopEffect,
+        ReceivePathsEffect,
+        AppStatusEffect
+    ])
   ],
   providers: [],
   bootstrap: [AppComponent]

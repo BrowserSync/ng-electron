@@ -22,11 +22,14 @@ export class OptionsFormComponent implements OnInit {
     draggerOptions = {handle: '.drag-move'};
     isValid = false;
     valid$: Observable<boolean>;
+    paths: Observable<string[]>;
     @ViewChildren('proxies') proxyChildren: QueryList<ElementRef>;
     @ViewChildren('mappings') mappingChildren: QueryList<ElementRef>;
     // directorySelection: Observable<{id: string, paths: string[]}>;
 
-    constructor(private fb: FormBuilder, public store: Store<AppState>) {}
+    constructor(private fb: FormBuilder, public store: Store<AppState>) {
+        this.paths = store.select('global', 'paths').map((paths) => paths.map(([path, mime]) => path));
+    }
 
     get mappings(): FormArray {
         return <FormArray>this.optionsForm.get('mappings');
@@ -34,6 +37,10 @@ export class OptionsFormComponent implements OnInit {
 
     get proxies(): FormArray {
         return <FormArray>this.optionsForm.get('proxies');
+    }
+
+    inputFocused(incoming) {
+        console.log(incoming.value);
     }
 
     addMapping() {

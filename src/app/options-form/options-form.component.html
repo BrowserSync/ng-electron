@@ -60,6 +60,8 @@
               <input formControlName="route"
                      id="{{'route' + i}}"
                      placeholder="eg: /wp-content"
+                     #mappingRoute
+                     (focus)="inputFocused(mappingRoute)"
                      class="field-text-input field-text-input--grow" />
             </div>
           </div>
@@ -71,6 +73,11 @@
           </div>
         </div>
       </div>
+    </div>
+    <div>
+      <ul class="path-list">
+        <li class="path-item" *ngFor="let path of (paths|async)">{{path}}</li>
+      </ul>
     </div>
   </div>
 </form>

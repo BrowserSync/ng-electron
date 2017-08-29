@@ -14,12 +14,18 @@ export enum FormStatus {
     Invalid = 'Invalid',
 }
 
+export enum AppStatus {
+    Pending = 'Pending',
+    Ready = 'Ready'
+}
+
 export enum GlobalActions {
     SetStatus = 'SetStatus',
     SetFormStatus = 'SetFormStatus',
     SetBrowsersyncOptions = 'SetBrowsersyncOptions',
     ResetBrowsersyncOptions = 'ResetBrowsersyncOptions',
     BsInit = 'BsInit',
+    SetAppStatus = 'SetAppStatus',
     BsStop = 'BsStop',
     ReceivePaths = 'ReceivePaths',
 }
@@ -30,8 +36,9 @@ export interface GlobalState {
     active: boolean;
     paths: [string, string][]
     urls: string[];
-    formStatus: FormStatus
-    bsOptions: any
+    formStatus: FormStatus;
+    bsOptions: any;
+    appStatus: AppStatus;
 }
 
 export const defaultState: GlobalState = {
@@ -41,7 +48,8 @@ export const defaultState: GlobalState = {
     urls: [],
     paths: [],
     formStatus: FormStatus.Valid,
-    bsOptions: null
+    bsOptions: null,
+    appStatus: AppStatus.Pending
 };
 
 export function globalReducer(state = defaultState, action: IAction<any>): GlobalState {
@@ -50,6 +58,12 @@ export function globalReducer(state = defaultState, action: IAction<any>): Globa
             return {
                 ...state,
                 status: action.payload
+            }
+        }
+        case GlobalActions.SetAppStatus: {
+            return {
+                ...state,
+                appStatus: action.payload
             }
         }
         case GlobalActions.SetFormStatus: {

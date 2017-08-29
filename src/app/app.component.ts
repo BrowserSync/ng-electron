@@ -1,10 +1,10 @@
 import {ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {Store} from "@ngrx/store";
-import {GlobalActions, GlobalState, Status} from "../reducers/global";
+import {GlobalActions, GlobalState, Status, AppStatus} from "../reducers/global";
 import {Observable} from "rxjs/Observable";
 import {optionAction, OptionsActions, OptionsState} from "./options-form/reducer";
-import {ipcRenderer} from 'electron';
-import {initBs, receivePaths} from "../reducers/global-actions";
+import {ipcRenderer, ipcMain} from 'electron';
+import {initBs, receivePaths, setAppStatus} from "../reducers/global-actions";
 
 export interface AppState {
   global: GlobalState;
@@ -31,6 +31,8 @@ export class AppComponent {
 
       this.global = store.select('global');
       this.options = store.select('options');
+
+      store.dispatch(setAppStatus(AppStatus.Ready));
 
       ipcRenderer.on('paths', function(evt, data) {
           store.dispatch(receivePaths(data))
